@@ -1,8 +1,8 @@
-<div align="center"> <img src="https://github.com/nvim-mini/assets/blob/main/logo-2/logo-diff_readme.png" alt="mini.diff"/> </div>
+<p align="center"> <img src="https://github.com/nvim-mini/assets/blob/main/logo-2/logo-diff_readme.png?raw=true" alt="mini.diff" style="max-width:100%;border:solid 2px"/> </p>
 
 ### Work with diff hunks
 
-See more details in [Features](#features) and [help file](doc/mini-diff.txt).
+See more details in [Features](#features) and [Documentation](doc/mini-diff.txt).
 
 ---
 
@@ -21,6 +21,7 @@ If you want to help this project grow but don't know where to start, check out [
 
 ## Demo
 
+<!-- Demo source: https://github.com/nvim-mini/assets/blob/main/demo/demo-diff.mp4 -->
 https://github.com/nvim-mini/mini.nvim/assets/24854248/77849127-ee9f-430b-9eff-5a8a724c21ea
 
 ## Features
@@ -40,11 +41,12 @@ What it doesn't do:
 
 - Provide functionality to work directly with Git outside of visualizing and staging (applying) hunks with (default) Git source. In particular, unstaging hunks is not supported.
 
-To read more information, see these tags in help file:
-- `*MiniDiff-overview*`
-- `*MiniDiff-source-specification*`
-- `*MiniDiff-hunk-specification*`
-- `*MiniDiff-diff-summary*`
+For more information see these parts of help:
+
+- `:h MiniDiff-overview`
+- `:h MiniDiff-source-specification`
+- `:h MiniDiff-hunk-specification`
+- `:h MiniDiff-diff-summary`
 
 ## Overview
 
@@ -63,9 +65,10 @@ Although computing diff is a general concept (used on its own, in Git, etc.), th
     - Update visualization based on configurable style: either by placing colored text in sign column or coloring line numbers. Colors for both styles are defined per hunk type in corresponding `MiniDiffSign*` highlight group and sign text for "sign" style can be configured in `config.view.signs`.
     - Update overlay view (if it is enabled).
     - Update `vim.b.minidiff_summary` and `vim.b.minidiff_summary_string` buffer-local variables. These can be used, for example, in statusline.
-    - Trigger `MiniDiffUpdated` `User` event. See `*MiniDiff-diff-summary*` help tag for example of how to use it.
+    - Trigger `MiniDiffUpdated` `User` event. See `:h MiniDiff-diff-summary` for example of how to use it.
 
 Notes:
+
 - Use `:edit` to reset (disable and re-enable) current buffer.
 
 ### Overlay
@@ -85,18 +88,20 @@ It shows more diff details inside text area:
 ### Mappings
 
 This module provides mappings for common actions with diffs, like:
+
 - Apply and reset hunks.
 - "Hunk range under cursor" textobject.
 - Go to first/previous/next/last hunk range.
 
 Examples:
+
 - `vip` followed by `gh` / `gH` applies/resets hunks inside current paragraph. Same can be achieved in operator form `ghip` / `gHip`, which has the advantage of being dot-repeatable.
 - `gh_` / `gH_` applies/resets current line (even if it is not a full hunk).
 - `ghgh` / `gHgh` applies/resets hunk range under cursor.
 - `dgh` deletes hunk range under cursor.
 - `[H` / `[h` / `]h` / `]H` navigate cursor to the first / previous / next / last hunk range of the current buffer.
 
-Mappings for some functionality are assumed to be done manually. See tag `*MiniDiff.operator()*` in help file.
+Mappings for some functionality are assumed to be done manually. See `:h MiniDiff.operator()`.
 
 ### Buffer-local variables
 
@@ -137,85 +142,67 @@ Here are code snippets for some common installation methods (use only one):
 
 <details>
 <summary>With <a href="https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-deps.md">mini.deps</a></summary>
-<table>
-    <thead>
-        <tr>
-            <th>Github repo</th> <th>Branch</th> <th>Code snippet</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td rowspan=2>'mini.nvim' library</td> <td>Main</td> <td rowspan=2><i>Follow recommended 'mini.deps' installation</i></td>
-        </tr>
-        <tr>
-            <td>Stable</td>
-        </tr>
-        <tr>
-            <td rowspan=2>Standalone plugin</td> <td>Main</td> <td><code>add('nvim-mini/mini.diff')</code></td>
-        </tr>
-        <tr>
-            <td>Stable</td> <td><code>add({ source = 'nvim-mini/mini.diff', checkout = 'stable' })</code></td>
-        </tr>
-    </tbody>
-</table>
+
+- 'mini.nvim' library:
+
+    | Branch | Code snippet                                  |
+    |--------|-----------------------------------------------|
+    | Main   | *Follow recommended ‘mini.deps’ installation* |
+    | Stable | *Follow recommended ‘mini.deps’ installation* |
+
+- Standalone plugin:
+
+    | Branch | Code snippet                                                   |
+    |--------|----------------------------------------------------------------|
+    | Main   | `add(‘nvim-mini/mini.diff’)`                                   |
+    | Stable | `add({ source = ‘nvim-mini/mini.diff’, checkout = ‘stable’ })` |
+
 </details>
 
 <details>
 <summary>With <a href="https://github.com/folke/lazy.nvim">folke/lazy.nvim</a></summary>
-<table>
-    <thead>
-        <tr>
-            <th>Github repo</th> <th>Branch</th> <th>Code snippet</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td rowspan=2>'mini.nvim' library</td> <td>Main</td> <td><code>{ 'nvim-mini/mini.nvim', version = false },</code></td>
-        </tr>
-        <tr>
-            <td>Stable</td> <td><code>{ 'nvim-mini/mini.nvim', version = '*' },</code></td>
-        </tr>
-        <tr>
-            <td rowspan=2>Standalone plugin</td> <td>Main</td> <td><code>{ 'nvim-mini/mini.diff', version = false },</code></td>
-        </tr>
-        <tr>
-            <td>Stable</td> <td><code>{ 'nvim-mini/mini.diff', version = '*' },</code></td>
-        </tr>
-    </tbody>
-</table>
+
+- 'mini.nvim' library:
+
+    | Branch | Code snippet                                  |
+    |--------|-----------------------------------------------|
+    | Main   | `{ 'nvim-mini/mini.nvim', version = false },` |
+    | Stable | `{ 'nvim-mini/mini.nvim', version = '*' },`   |
+
+- Standalone plugin:
+
+    | Branch | Code snippet                                  |
+    |--------|-----------------------------------------------|
+    | Main   | `{ 'nvim-mini/mini.diff', version = false },` |
+    | Stable | `{ 'nvim-mini/mini.diff', version = '*' },`   |
+
 </details>
 
 <details>
 <summary>With <a href="https://github.com/junegunn/vim-plug">junegunn/vim-plug</a></summary>
-<table>
-    <thead>
-        <tr>
-            <th>Github repo</th> <th>Branch</th> <th>Code snippet</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td rowspan=2>'mini.nvim' library</td> <td>Main</td> <td><code>Plug 'nvim-mini/mini.nvim'</code></td>
-        </tr>
-        <tr>
-            <td>Stable</td> <td><code>Plug 'nvim-mini/mini.nvim', { 'branch': 'stable' }</code></td>
-        </tr>
-        <tr>
-            <td rowspan=2>Standalone plugin</td> <td>Main</td> <td><code>Plug 'nvim-mini/mini.diff'</code></td>
-        </tr>
-        <tr>
-            <td>Stable</td> <td><code>Plug 'nvim-mini/mini.diff', { 'branch': 'stable' }</code></td>
-        </tr>
-    </tbody>
-</table>
-</details>
 
-<br>
+- 'mini.nvim' library:
+
+    | Branch | Code snippet                                         |
+    |--------|------------------------------------------------------|
+    | Main   | `Plug 'nvim-mini/mini.nvim'`                         |
+    | Stable | `Plug 'nvim-mini/mini.nvim', { 'branch': 'stable' }` |
+
+- Standalone plugin:
+
+    | Branch | Code snippet                                         |
+    |--------|------------------------------------------------------|
+    | Main   | `Plug 'nvim-mini/mini.diff'`                         |
+    | Stable | `Plug 'nvim-mini/mini.diff', { 'branch': 'stable' }` |
+
+</details>
 
 **Important**: don't forget to call `require('mini.diff').setup()` to enable its functionality.
 
 **Note**: if you are on Windows, there might be problems with too long file paths (like `error: unable to create file <some file name>: Filename too long`). Try doing one of the following:
+
 - Enable corresponding git global config value: `git config --system core.longpaths true`. Then try to reinstall.
+- Install plugin in other place with shorter path.
 
 ## Default config
 
