@@ -1,10 +1,7 @@
 --- *mini.diff* Work with diff hunks
---- *MiniDiff*
 ---
 --- MIT License Copyright (c) 2024 Evgeni Chasnovski
----
---- ==============================================================================
----
+
 --- Features:
 ---
 --- - Visualize difference between buffer text and its configurable reference
@@ -52,7 +49,7 @@
 ---
 --- # Comparisons ~
 ---
---- - 'lewis6991/gitsigns.nvim':
+--- - [lewis6991/gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim):
 ---     - Main inspiration for this module, so there are many similarities.
 ---     - Can display only Git hunks, while this module has extensible design.
 ---     - Provides more functionality to work with Git outside of hunks.
@@ -60,17 +57,17 @@
 ---
 --- # Highlight groups ~
 ---
---- * `MiniDiffSignAdd`        - "add" hunk lines visualization.
---- * `MiniDiffSignChange`     - "change" hunk lines visualization.
---- * `MiniDiffSignDelete`     - "delete" hunk lines visualization.
---- * `MiniDiffOverAdd`        - added buffer text shown in overlay.
---- * `MiniDiffOverChange`     - changed reference text shown in overlay.
---- * `MiniDiffOverChangeBuf`  - changed buffer text shown in overlay.
---- * `MiniDiffOverContext`    - context of a change shown in reference overlay.
---- * `MiniDiffOverContextBuf` - context of a change shown in buffer overlay.
---- * `MiniDiffOverDelete`     - deleted reference text shown in overlay.
+--- - `MiniDiffSignAdd`        - "add" hunk lines visualization.
+--- - `MiniDiffSignChange`     - "change" hunk lines visualization.
+--- - `MiniDiffSignDelete`     - "delete" hunk lines visualization.
+--- - `MiniDiffOverAdd`        - added buffer text shown in overlay.
+--- - `MiniDiffOverChange`     - changed reference text shown in overlay.
+--- - `MiniDiffOverChangeBuf`  - changed buffer text shown in overlay.
+--- - `MiniDiffOverContext`    - context of a change shown in reference overlay.
+--- - `MiniDiffOverContextBuf` - context of a change shown in buffer overlay.
+--- - `MiniDiffOverDelete`     - deleted reference text shown in overlay.
 ---
---- To change any highlight group, modify it directly with |:highlight|.
+--- To change any highlight group, set it directly with |nvim_set_hl()|.
 ---
 --- # Disabling ~
 ---
@@ -80,6 +77,7 @@
 --- customization intentions, writing exact rules for disabling module's
 --- functionality is left to user.
 --- See |mini.nvim-disabling-recipes| for common recipes.
+---@tag MiniDiff
 
 --- # Diffs and hunks ~
 ---
@@ -94,7 +92,9 @@
 --- For example, default reference text is computed as file content in Git index.
 --- This can be customized in `config.source` (see |MiniDiff-source-specification|).
 ---
----                                                    *MiniDiff-hunk-specification*
+--- # Hunk specification ~
+--- *MiniDiff-hunk-specification*
+---
 --- Hunk describes two sets (one from buffer text, one - from reference) of
 --- consecutive lines which are different. In this module hunk is stored as
 --- a table with the following fields:
@@ -128,14 +128,13 @@
 ---     - Update visualization based on configurable style: either by placing
 ---       colored text in sign column or coloring line numbers. Colors for both
 ---       styles are defined per hunk type in corresponding `MiniDiffSign*`
----       highlight group (see |MiniDiff|) and sign text for "sign" style can
+---       highlight group (see |mini.diff|) and sign text for "sign" style can
 ---       be configured in `view.signs` of |MiniDiff.config|.
 ---     - Update overlay view (if it is enabled).
 ---     - Update `vim.b.minidiff_summary` and `vim.b.minidiff_summary_string`
 ---       buffer-local variables. These can be used, for example, in statusline.
----                                                          *MiniDiff-update-event*
----     - Trigger `MiniDiffUpdated` `User` event. See |MiniDiff-diff-summary| for
----       example of how to use it.
+---     - *MiniDiff-update-event* Trigger `MiniDiffUpdated` `User` event.
+---       See |MiniDiff-diff-summary| for example of how to use it.
 ---
 --- Notes:
 --- - Use |:edit| to reset (disable and re-enable) current buffer.
@@ -195,7 +194,8 @@
 --- See |MiniDiff.operator()|.
 ---
 --- # Buffer-local variables ~
----                                                          *MiniDiff-diff-summary*
+--- *MiniDiff-diff-summary*
+---
 --- Each enabled buffer has the following buffer-local variables which can be
 --- used in custom statusline to show an overview of hunks in current buffer:
 ---
@@ -268,9 +268,7 @@ MiniDiff.setup = function(config)
 end
 
 --stylua: ignore
---- Module config
----
---- Default values:
+--- Defaults ~
 ---@eval return MiniDoc.afterlines_to_code(MiniDoc.current.eval_section)
 ---@text # View ~
 ---
@@ -286,8 +284,8 @@ end
 --- <
 --- `view.style` is a string defining visualization style. Can be one of "sign"
 --- (as a colored sign in a |sign-column|) or "number" (colored line number).
---- Default: "number" if |number| option is enabled, "sign" otherwise.
---- Note: with "sign" style it is usually better to have |signcolumn| always shown.
+--- Default: "number" if |'number'| option is enabled, "sign" otherwise.
+--- Note: with "sign" style it is better to have |'signcolumn'| always shown.
 ---
 --- `view.signs` is a table with one or two character strings used as signs for
 --- corresponding ("add", "change", "delete") hunks.
@@ -296,11 +294,11 @@ end
 --- `view.priority` is a number with priority used for visualization and
 --- overlay |extmarks|.
 --- Default: 199 which is one less than `user` in |vim.hl.priorities| (on Neovim<0.11
---- see |vim.highlight.priorities|) to have higher priority than automated
+--- see |vim.hl.priorities|) to have higher priority than automated
 --- extmarks but not as in user enabled ones.
 ---
----                                                  *MiniDiff-source-specification*
 --- # Source ~
+--- *MiniDiff-source-specification*
 ---
 --- `config.source` is a table with single source or array of them. Single source
 --- defines how reference text is managed in a particular buffer. Sources in array
@@ -321,7 +319,7 @@ end
 ---
 ---   Can return `false` to indicate that attach has failed. If attach fail can
 ---   not be inferred immediately (for example, due to asynchronous execution),
----   should explicitly call |MiniDiff.fail_attch()| with appropriate arguments.
+---   should explicitly call |MiniDiff.fail_attach()| with appropriate arguments.
 ---   This is important to properly process array of sources.
 ---
 ---   No default value, should be always supplied.
