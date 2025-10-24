@@ -1312,8 +1312,9 @@ H.update_buf_diff = vim.schedule_wrap(function(buf_id)
   -- Request highlighting clear to be done in decoration provider
   buf_cache.needs_clear = true
 
-  -- Trigger event for users to possibly hook into
-  vim.api.nvim_exec_autocmds('User', { pattern = 'MiniDiffUpdated' })
+  -- Trigger event for users to possibly hook into. Ensure target buffer is
+  -- current (for proper `buf` in event data)
+  vim.api.nvim_buf_call(buf_id, function() vim.api.nvim_exec_autocmds('User', { pattern = 'MiniDiffUpdated' }) end)
 
   -- Force redraw. NOTE: Using 'redraw' not always works (`<Cmd>update<CR>`
   -- from keymap with "save" source will not redraw) while 'redraw!' flickers.
