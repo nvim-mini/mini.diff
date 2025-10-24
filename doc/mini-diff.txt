@@ -203,17 +203,18 @@ Each enabled buffer has the following buffer-local variables which can be
 used in custom statusline to show an overview of hunks in current buffer:
 
 - `vim.b.minidiff_summary` is a table with the following fields:
-    - `source_name` - name of the active source.
+    - `source_name` - name of the active source. This is the only present field
+      if buffer's reference text is not (yet) set.
     - `n_ranges` - number of hunk ranges (sequences of contiguous hunks).
     - `add` - number of added lines.
     - `change` - number of changed lines.
     - `delete` - number of deleted lines.
 
 - `vim.b.minidiff_summary_string` is a string representation of summary
-  with a fixed format. It is expected to be used as is. To achieve
-  different formatting, use `vim.b.minidiff_summary` to construct one.
-  The best way to do this is by overriding `vim.b.minidiff_summary_string`
-  in the callback for |MiniDiff-update-event| event: >lua
+  with a fixed format. Empty string if there is no reference text (yet).
+  It is expected to be used as is. To achieve different formatting, use
+  `vim.b.minidiff_summary` to construct one. The best way to do this is by
+  overriding `vim.b.minidiff_summary_string` inside |MiniDiff-update-event|: >lua
 
   local format_summary = function(data)
     local summary = vim.b[data.buf].minidiff_summary
