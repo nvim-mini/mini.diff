@@ -656,10 +656,14 @@ MiniDiff.gen_source.git = function()
   local attach = function(buf_id)
     -- Try attaching to a buffer only once
     if H.git_cache[buf_id] ~= nil then return false end
-    -- - Possibly resolve symlinks to get data from the original repo
+
+    -- Possibly resolve symlinks to get data from the original repo
     local path = H.get_buf_realpath(buf_id)
     if path == '' then return false end
 
+    -- Claim Git cache to not try to attach to the non-Git path several times.
+    -- NOTE: Do this after `path==''` check since the same buffer can be reused
+    -- for opening actual file (`nvim` -> `:edit file`).
     H.git_cache[buf_id] = {}
     H.git_start_watching_index(buf_id, path)
   end
@@ -676,6 +680,14 @@ MiniDiff.gen_source.git = function()
     local patch = H.git_format_patch(buf_id, hunks, path_data)
     H.git_apply_patch(path_data, patch)
   end
+
+  -- Ensure to clean source cache for `:edit` to force reattach, since regular
+  -- `disable()` from `on_detach` is not enough as there can be no source
+  -- attached (like for files not in Git repo).
+  local augroup = vim.api.nvim_create_augroup('MiniDiffSourceGit', { clear = true })
+  local clear_buf_cache = function(ev) H.git_cache[ev.buf] = nil end
+  local au_opts = { group = augroup, callback = clear_buf_cache, desc = 'Clear Git cache' }
+  vim.api.nvim_create_autocmd({ 'BufUnload' }, au_opts)
 
   return { name = 'git', attach = attach, detach = detach, apply_hunks = apply_hunks }
 end
@@ -1699,7 +1711,6 @@ H.git_start_watching_index = function(buf_id, path)
       return
     end
     MiniDiff.fail_attach(buf_id)
-    H.git_cache[buf_id] = {}
   end)
 
   local process, stdout_feed = nil, {}
